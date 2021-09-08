@@ -29,12 +29,12 @@ if [ -d "pymake" ] ; then
   rm -rf pymake
 fi
 
-# Installing Required Softwares
-sudo dnf install python36 -y
+# Install Dependent S/W
+sudo dnf install -y python36
 sudo dnf install -y git
-pip3 --version
-pip3 install tox
-# Downloading the git Repository
+sudo dnf install -y wget
+
+# Download the repos
 git clone https://github.com/tqdm/pymake
 
 
@@ -51,36 +51,13 @@ else
  exit
 fi
 
-#Build and test with options default,simplejson,pre-commit & cover
-tox -e py36-default
-ret=$?
-if [ $ret -ne 0 ] ; then
-  echo "Build & Test failed for default"
-else
-  echo "Build & Test Success for default"
-fi
+sudo pip3 install tox
 
-tox -e py36-simplejson
 ret=$?
-if [ $ret -ne 0 ] ; then
-  echo "Build & Test failed for simplejson"
-else
-  echo "Build & Test Success for simplejson"
-fi
 
-tox -e pre-commit
-ret=$?
 if [ $ret -ne 0 ] ; then
-  echo "Build & Test failed for pre-commit"
+ echo "dependency python pkg install failed "
+ exit
 else
-  echo "Build & Test Success for pre-commit"
-fi
-
-
-tox -e cover
-ret=$?
-if [ $ret -ne 0 ] ; then
-  echo "Build & Test failed for cover"
-else
-  echo "Build & Test Success for cover"
+  tox -e py36
 fi
